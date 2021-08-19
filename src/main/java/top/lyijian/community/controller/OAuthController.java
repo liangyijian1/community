@@ -2,12 +2,19 @@ package top.lyijian.community.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import top.lyijian.community.dto.AccessTokenDto;
 import top.lyijian.community.dto.GiteeUser;
+import top.lyijian.community.mapper.UserMapper;
+import top.lyijian.community.model.User;
 import top.lyijian.community.provider.GiteeProvider;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.UUID;
 
 
 @Controller
@@ -20,18 +27,35 @@ public class OAuthController {
     private String client_secret;
     @Value("${gitee.redirect.url}")
     private String redirect_url;
+    @Autowired
+    private UserMapper userMapper;
 
     @GetMapping("/callback")
-    public String AuthorizeController(@RequestParam("code") String code){
+    public String AuthorizeController(@RequestParam("code") String code,
+                                      HttpServletRequest httpServletRequest){
         AccessTokenDto accessTokenDto = new AccessTokenDto();
         accessTokenDto.setCode(code);
         accessTokenDto.setClient_id(client_id);
         accessTokenDto.setClient_secret(client_secret);
         accessTokenDto.setRedirect_uri(redirect_url);
         String accessToken = giteeProvider.getAccessToken(accessTokenDto);
-        GiteeUser user = giteeProvider.getUser(accessToken);
-        System.out.println(user);
-        return "redirect:index";
+        GiteeUser giteeUser = giteeProvider.getUser(accessToken);
+        if (giteeUser!=null){
+            User user = new User();
+            user.setToken(UUID.randomUUID().toString());
+            user.setName(giteeUser.getName());
+            user.setAccountId(String.valueOf(giteeUser.getId()));
+            user.setGmtCreate(System.currentTimeMillis());
+            user.setGmtModified(user.getGmtCreate());
+            userMapper.insert(user);
+            httpServletRequest.getSession().setAttribute("user",user);
+            return "redirect:/";
+
+        }else {
+            return "redirect:/";
+        }
+
+
     }
 
 }
