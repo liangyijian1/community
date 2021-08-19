@@ -1,0 +1,6 @@
+gitee:
+  client:
+    id: f4a1508fb097efd7db3eba8a125450de788695c0af55bdbc3afc20bb580ae58e
+    secret: 550a55c2538fd2ed7263af72c3dfe0d271248acfc4ef66e674b23954a17b24db
+  redirect:
+    url: 550a55c2538fd2ed7263af72c3dfe0d271248acfc4ef66e674b23954a17b24db
