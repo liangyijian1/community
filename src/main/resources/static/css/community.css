@@ -1,0 +1,17 @@
+body {
+    background-color: #efefef;
+}
+
+.main{
+    background-color: white;
+    margin: 35px;
+}
+.span_img{
+    font-size: smaller;
+    color: darkgray;
+}
+
+.btn-publish{
+    float: right;
+    margin-bottom: 15px;
+}
