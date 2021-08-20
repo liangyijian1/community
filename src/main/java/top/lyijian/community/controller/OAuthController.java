@@ -12,7 +12,9 @@ import top.lyijian.community.mapper.UserMapper;
 import top.lyijian.community.model.User;
 import top.lyijian.community.provider.GiteeProvider;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.UUID;
 
@@ -32,7 +34,8 @@ public class OAuthController {
 
     @GetMapping("/callback")
     public String AuthorizeController(@RequestParam("code") String code,
-                                      HttpServletRequest httpServletRequest){
+                                      HttpServletRequest request,
+                                      HttpServletResponse response){
         AccessTokenDto accessTokenDto = new AccessTokenDto();
         accessTokenDto.setCode(code);
         accessTokenDto.setClient_id(client_id);
@@ -42,15 +45,16 @@ public class OAuthController {
         GiteeUser giteeUser = giteeProvider.getUser(accessToken);
         if (giteeUser!=null){
             User user = new User();
-            user.setToken(UUID.randomUUID().toString());
+            user.setId(null);
+            String token = UUID.randomUUID().toString();
+            user.setToken(token);
             user.setName(giteeUser.getName());
             user.setAccountId(String.valueOf(giteeUser.getId()));
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
             userMapper.insert(user);
-            httpServletRequest.getSession().setAttribute("user",user);
+            response.addCookie(new Cookie("token",token));
             return "redirect:/";
-
         }else {
             return "redirect:/";
         }
