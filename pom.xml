@@ -8,6 +8,7 @@
         <version>2.5.3</version>
         <relativePath/>
     </parent>
+
     <groupId>top.lyijian.community</groupId>
     <artifactId>community</artifactId>
     <version>0.0.1-SNAPSHOT</version>
@@ -62,7 +63,6 @@
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>1.2.4</version>
         </dependency>
-
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

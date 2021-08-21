@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import top.lyijian.community.dto.PageDto;
 import top.lyijian.community.dto.QuestionDto;
 import top.lyijian.community.mapper.QuestionMapper;
 import top.lyijian.community.mapper.UserMapper;
@@ -25,7 +27,9 @@ public class IndexController {
     private QuestionService questionService;
 
     @GetMapping("/")
-    public String index(HttpServletRequest request, Model model){
+    public String index(HttpServletRequest request,
+                        Model model,
+                        @RequestParam(name = "pageNo",defaultValue = "1") Integer pageNo){
         Cookie[] cookies = request.getCookies();
         if (cookies!=null){
             for (Cookie cookie : cookies) {
@@ -42,7 +46,7 @@ public class IndexController {
                 }
             }
         }
-        List<QuestionDto> questions = questionService.list();
+        List<QuestionDto> questions = questionService.list(pageNo, PageDto.PAGE_SIZE,model);
         model.addAttribute("questions",questions);
         return "index";
     }
