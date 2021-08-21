@@ -2,9 +2,14 @@ package top.lyijian.community.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import top.lyijian.community.dto.QuestionDto;
+import top.lyijian.community.mapper.QuestionMapper;
 import top.lyijian.community.mapper.UserMapper;
+import top.lyijian.community.model.Question;
 import top.lyijian.community.model.User;
+import top.lyijian.community.service.QuestionService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -16,9 +21,11 @@ import java.util.Map;
 public class IndexController {
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private QuestionService questionService;
 
     @GetMapping("/")
-    public String index(HttpServletRequest request){
+    public String index(HttpServletRequest request, Model model){
         Cookie[] cookies = request.getCookies();
         if (cookies!=null){
             for (Cookie cookie : cookies) {
@@ -28,7 +35,6 @@ public class IndexController {
                     map.put("token",token);
                     List<User> users = userMapper.selectByMap(map);
                     User user = users.get(0);
-                    System.out.println(user);
                     if (user!=null){
                         request.getSession().setAttribute("user",user);
                     }
@@ -36,6 +42,8 @@ public class IndexController {
                 }
             }
         }
+        List<QuestionDto> questions = questionService.list();
+        model.addAttribute("questions",questions);
         return "index";
     }
 }

@@ -7,6 +7,34 @@
 </head>
 <body>
     <div th:replace="common::top_navbar"></div>
-
+    <div class="container-fluid">
+        <div class="row main">
+            <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+                <h2><span class="glyphicon glyphicon-list" aria-hidden="true"></span>&nbsp;&nbsp;发现</h2>
+                <hr>
+                <div class="media" th:each="item:${questions}">
+                    <div class="media-left">
+                        <a href="#">
+                            <img class="img-circle" th:src="${item.getUser().getAvatar_url()}" alt="...">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading">
+                            <a th:text="${item.getTitle()}"></a>
+                        </h4>
+                        <span class="text-desc">
+                            <span>[[${item.comment_count}]]个回复·</span>
+                            <span>[[${item.view_count}]]个回复·</span>
+                            <span th:text="${#dates.format(item.getGmt_create(),'yyyy-MM-dd HH:mm')}"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                <h3>交易指南</h3>
+                本站在线支付功能还在开发中，只支持线下当面交易哈，请勿轻信私下转账
+            </div>
+        </div>
+    </div>
 </body>
 </html>

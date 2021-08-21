@@ -6,9 +6,26 @@ body {
     background-color: white;
     margin: 35px;
 }
+.media{
+    margin-bottom: 16px;
+}
+.img-circle {
+    width: 45px;
+    height: 45px;
+    margin-right: 10px;
+}
+.text-desc {
+    font-size: 12px;
+    font-weight: normal;
+    color: #999;
+}
 .span_img{
     font-size: smaller;
     color: darkgray;
+}
+.publish_error{
+    color: red;
+    font-size: medium;
 }
 
 .btn-publish{
